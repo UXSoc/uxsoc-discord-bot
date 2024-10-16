@@ -98,7 +98,7 @@ client.on('messageCreate', async message => {
             var dscrd_username = message.author.username;
             var dscrd_nick = message.member.nickname;
             if (!username) return message.reply("Missing argument: username")
-            if (!dscrd_nick) {
+            if (!dscrd_nick || (dscrd_nick && (dscrd_nick.split(" ").length < 2))) {
                 message.react('❌')
                 return message.reply(`Please follow the server profile name format as seen in <#${rules_channel}> before linking to Github.`)
             }
