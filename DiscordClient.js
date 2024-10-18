@@ -84,8 +84,8 @@ client.on('messageCreate', async message => {
     var args = message.content.split(' ');
     var accData = accountsdata[message.author.id];
     if (hype_channels.includes(message.channelId)) {
-        for (let i = 0; i< ess.randInt(config.min_hype,config.max_hype); i++) message.react(announcement_reactions[ess.randomIndex(announcement_reactions.length)]);
         message.react(announcement_hearts[ess.randomIndex(announcement_hearts.length)]);
+        for (let i = 0; i< ess.randInt(config.min_hype,config.max_hype); i++) message.react(announcement_reactions[ess.randomIndex(announcement_reactions.length)]);
     }
     if (!message.content.startsWith(PREFIX)) return;
     if (message.author.id == "1294906343421120532") return;
