@@ -7,6 +7,7 @@ const fetch = require('node-fetch');
 const client = new Client({ intents: [
     Intents.FLAGS.GUILDS,
     Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.GUILD_MEMBERS,
     Intents.FLAGS.MESSAGE_CONTENT,
     Intents.FLAGS.GUILD_MESSAGE_REACTIONS
     ],
@@ -127,21 +128,20 @@ client.on('messageReactionAdd', async (reaction, user) => {
     if (message.channel.parentId == "1284767734256635976") {
         const reactionEmoji = reaction.emoji.name;
         console.log(reactionEmoji)
+        const member = await message.guild.members.fetch(user.id);
         if (reactionEmoji == '🔥') {
-            const guild = message.guild;
-            const member = await guild.members.fetch(user.id);
             if (member.roles.cache.has("1294311955401674762") || member.roles.cache.has("1284754382205882388") || member.roles.cache.has("1284754282075390044") || member.roles.cache.has("1292074089715990549")) {
-                await message.member.roles.add("1298964889498288198");
+                await member.roles.add("1298964889498288198");
             } else {
                 removeReaction(user, message, reactionEmoji);
             }
             return;
         }
+        console.log('test')
         const thread = message.channel;
         var role = roleMapping[reactionEmoji];
         if (!role) return;
-        const guild = message.guild;
-        const member = await guild.members.fetch(user.id);
+        console.log(member.nickname, member.roles.cache.has("1298964889498288198"))
         if (member.roles.cache.has("1298964889498288198")) {
             const nickname = member.nickname || user.username;
             await thread.send(`**${nickname}** joined as a \`${role}\``);
@@ -164,7 +164,8 @@ client.on('messageReactionRemove', async (reaction, user) => {
     if (message.channel.parentId == "1284767734256635976") {
         const reactionEmoji = reaction.emoji.name;
         if (reactionEmoji == '🔥') {
-            await message.member.roles.remove("1298964889498288198");
+            const member = await message.guild.members.fetch(user.id);
+            await member.roles.remove("1298964889498288198");
             return;
         }
     }
