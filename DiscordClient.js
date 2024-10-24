@@ -1,6 +1,6 @@
 require('dotenv').config();
 const fetch = require('node-fetch');
-const ess = require('./ess.js');
+const ess = require('./utils/ess');
 const config = require('./config.json');
 const fs = require("fs");
 const { Client, Intents } = require('discord.js');
