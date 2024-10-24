@@ -271,6 +271,9 @@ client.on('messageCreate', async message => {
             }
             break;
         case 'ping':
-            return message.reply(`pong!`);
+            const msg = await message.channel.send('Pinging...');
+            const latency = msg.createdTimestamp - message.createdTimestamp;
+            const apiLatency = Math.round(client.ws.ping);
+            return await msg.edit(`Pong! 🏓 Latency: ${latency}ms. API Latency: ${apiLatency}ms`);
     }
 });
