@@ -132,10 +132,10 @@ client.on('messageReactionAdd', async (reaction, user) => {
             const member = await guild.members.fetch(user.id);
             if (member.roles.cache.has("1294311955401674762") || member.roles.cache.has("1284754382205882388") || member.roles.cache.has("1284754282075390044") || member.roles.cache.has("1292074089715990549")) {
                 await message.member.roles.add("1298964889498288198");
-                return;
             } else {
                 removeReaction(user, message, reactionEmoji);
             }
+            return;
         }
         const thread = message.channel;
         var role = roleMapping[reactionEmoji];
@@ -270,5 +270,7 @@ client.on('messageCreate', async message => {
                 return message.reply(`An error occurred. ${error}`)
             }
             break;
+        case 'ping':
+            return message.reply(`pong!`);
     }
 });
