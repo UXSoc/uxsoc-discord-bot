@@ -4,7 +4,14 @@ const config = require('./config.json');
 const fs = require("fs");
 const { Client, Intents, MessageEmbed } = require('discord.js');
 const fetch = require('node-fetch');
-const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Client({ intents: [
+    Intents.FLAGS.GUILDS,
+    Intents.FLAGS.GUILD_MESSAGES,
+    Intents.FLAGS.MESSAGE_CONTENT,
+    Intents.FLAGS.GUILD_MESSAGE_REACTIONS
+    ],
+    partials: ['MESSAGE', 'CHANNEL', 'REACTION']
+});
 
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const ENVIRONMENT = process.env.ENVIRONMENT;
@@ -78,6 +85,86 @@ client.on('ready', () => {
     console.log('UXBot connected and ready!');
     client.user.setActivity(config.activity.name, { type: config.activity.type })
 })
+async function removeReaction(user, message, emoji) {
+    const fetchedMessage = await message.channel.messages.fetch(message.id);
+    console.log("removing reaction")
+    const toRemove = fetchedMessage.reactions.cache.find(r => r.emoji.name === emoji);
+    if (toRemove) await toRemove.users.remove(user.id);
+}
+client.on('threadCreate', async (thread) => {
+    if (thread.parent && thread.parent.type === "GUILD_FORUM") {
+        if (thread.parentId === "1284767734256635976") {
+            try {
+                const messages = await thread.messages.fetch({ limit: 1 });
+                const firstMessage = messages.first();
+                if (firstMessage) {
+                    firstMessage.react('🔥');
+                }
+                var rolemsg = await thread.send("**React with the following if you’re interested:**\n     • 🎨 for Designers\n     • 💻 for Developers")
+                await rolemsg.react('💻')
+                await rolemsg.react('🎨')
+            } catch (error) {
+                console.error('Error fetching or reacting to the first post:', error);
+            }
+        }
+    }
+});
+const roleMapping = {
+    '🎨': '🎨designer',
+    '💻': '💻developer'
+};
+client.on('messageReactionAdd', async (reaction, user) => {
+    if (reaction.partial) {
+        try {
+            await reaction.fetch();
+        } catch (error) {
+            console.error('Something went wrong fetching the reaction:', error);
+            return;
+        }
+    }
+    if (user.bot) return;
+    const message = reaction.message;
+    if (message.channel.parentId == "1284767734256635976") {
+        const reactionEmoji = reaction.emoji.name;
+        console.log(reactionEmoji)
+        if (reactionEmoji == '🔥') {
+            await message.member.roles.add("1298964889498288198");
+            return;
+        }
+        const thread = message.channel;
+        var role = roleMapping[reactionEmoji];
+        if (!role) return;
+        const guild = message.guild;
+        const member = await guild.members.fetch(user.id);
+        console.log(member.roles.cache.has("1298964889498288198"))
+        if (member.roles.cache.has("1298964889498288198")) {
+            const nickname = member.nickname || user.username;
+            await thread.send(`**${nickname}** joined as a \`${role}\``);
+        } else {
+            removeReaction(user, message, reactionEmoji);
+        }
+    }
+});
+client.on('messageReactionRemove', async (reaction, user) => {
+    if (reaction.partial) {
+        try {
+            await reaction.fetch();
+        } catch (error) {
+            console.error('Something went wrong fetching the reaction:', error);
+            return;
+        }
+    }
+    if (user.bot) return;
+    const message = reaction.message;
+    if (message.channel.parentId == "1284767734256635976") {
+        const reactionEmoji = reaction.emoji.name;
+        if (reactionEmoji == '🔥') {
+            await message.member.roles.remove("1298964889498288198");
+            return;
+        }
+    }
+});
+
 client.on('messageCreate', async message => {
     if ((ENVIRONMENT=="DEV" && !dev_channels.includes(message.channelId))) return;
     console.log(`received message ${message.content} from ${message.author.username} on channel ${message.channelId}.`)
