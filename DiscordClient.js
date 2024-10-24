@@ -25,13 +25,29 @@ const dev_channels = config.channels.dev;
 const hype_channels = config.channels.hype;
 
 var accountsdata;
-fs.readFile(accounts, "utf8", (error, data) => {
-    if (error) {
-      console.error(error);
-      return;
+function loadAccounts() {
+    if (!fs.existsSync(accounts)) {
+        fs.writeFile(accounts, JSON.stringify({}), (error) => {
+            if (error) {
+                throw new Error('Failed to create accounts.json: ' + error.message);
+            }
+            console.log('[INFO] Initialized accounts.json');
+            loadAccounts();
+        });
+    } else {
+        fs.readFile(accounts, 'utf8', (error, data) => {
+            if (error) {
+                throw new Error('Error reading accounts.json: ' + error.message);
+            }
+            try {
+                accountsdata = JSON.parse(data);
+            } catch (parseError) {
+                throw new Error('Error parsing JSON: ' + parseError.message);
+            }
+        });
     }
-    accountsdata = JSON.parse(data);
-});
+}
+loadAccounts();
 
 client.login(process.env.DISCORD_TOKEN);
 client.on('ready', () => {
