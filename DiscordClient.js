@@ -98,6 +98,11 @@ client.on('messageReactionAdd', async (reaction, user) => {
         const member = await message.guild.members.fetch(user.id);
         if (reactionEmoji == '🔥') {
             if (member.roles.cache.has("1294311955401674762") || member.roles.cache.has("1284754382205882388") || member.roles.cache.has("1284754282075390044") || member.roles.cache.has("1292074089715990549")) {
+                const dscrd_nick = message.member.nickname;
+                if (!dscrd_nick || (dscrd_nick && (dscrd_nick.split(" ").length < 2))) {
+                    removeReaction(user, message, reactionEmoji);
+                    return message.author.send(`Hey ${user.username} 👋, please follow the server profile name format as seen in <#${config.channels.rules}> before joining a project.`);
+                }
                 await member.roles.add(config.allow_project_join_role);
             } else {
                 removeReaction(user, message, reactionEmoji);
