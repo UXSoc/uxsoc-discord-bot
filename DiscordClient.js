@@ -103,14 +103,14 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 const dscrd_nick = member?.nickname || undefined;
                 if (!dscrd_nick || (dscrd_nick && (dscrd_nick.split(" ").length < 2))) {
                     removeReaction(user, message, reactionEmoji);
-                    return user.send(`Hey ${user.username} 👋, please follow the server profile name format as seen in <#${config.channels.rules}> before joining a project.`).catch(error => {
+                    return user.send(`Hey ${user.name} 👋, please follow the server profile name format as seen in <#${config.channels.rules}> before joining a project.`).catch(error => {
                         console.log("could not send dm to user.")
                     });
                 }
                 await member.roles.add(config.allow_project_join_role);
             } else {
                 removeReaction(user, message, reactionEmoji);
-                return user.send(`Hey ${user.username} 👋, please complete the **Git Gud at Git Workshop** to be able to contribute to community projects.`).catch(error => {
+                return user.send(`Hey ${user.name} 👋, please complete the **Git Gud at Git Workshop** to be able to contribute to community projects.`).catch(error => {
                     console.log("could not send dm to user.")
                 });
             }
@@ -120,7 +120,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         var role = roleMapping[reactionEmoji];
         if (!role) return;
         if (member.roles.cache.has(config.allow_project_join_role)) {
-            const nickname = member.nickname || user.username;
+            const nickname = member.nickname || user.name;
             await thread.send(`**${nickname}** joined as a \`${role}\``);
         } else {
             removeReaction(user, message, reactionEmoji);
