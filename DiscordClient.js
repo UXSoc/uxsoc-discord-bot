@@ -106,6 +106,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
                 await member.roles.add(config.allow_project_join_role);
             } else {
                 removeReaction(user, message, reactionEmoji);
+                return message.author.send(`Hey ${user.username} 👋, please complete the **Git Gud at Git Workshop** to be able to contribute to community projects.`);
             }
             return;
         }
