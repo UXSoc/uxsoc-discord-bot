@@ -1,6 +1,6 @@
 const fs = require("fs");
 const config = require('../config.json');
-module.exports = async (message, args, accountsdata) => {
+module.exports = async (message, args, accountsdata, client) => {
     var username = args[1];
     var dscrd_username = message.author.username;
     var dscrd_nick = message.member.nickname;

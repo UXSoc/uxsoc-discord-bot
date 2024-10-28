@@ -36,6 +36,6 @@ for (let i = 0; i < commands.length; i++) {
         inline: false
     })
 }
-module.exports = async (message, args, accountsdata) => {
+module.exports = async (message, args, accountsdata, client) => {
     message.channel.send(await embed("🤖 UXBot Commands", "", command_fields))
 };

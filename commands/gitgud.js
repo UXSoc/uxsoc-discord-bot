@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-module.exports = async (message, args, accountsdata) => {
+module.exports = async (message, args, accountsdata, client) => {
     const accData = accountsdata[message.author.id];
     const pullrequrl = args[1];
     if (!pullrequrl) return message.reply("Missing pull request url. Usage: `.gitgud <pull request url>`");

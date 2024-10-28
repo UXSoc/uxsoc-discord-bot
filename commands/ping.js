@@ -1,4 +1,4 @@
-module.exports = async (message, args, accountsdata) => {
+module.exports = async (message, args, accountsdata, client) => {
     const msg = await message.channel.send('Pinging...');
     const latency = msg.createdTimestamp - message.createdTimestamp;
     const apiLatency = Math.round(message.client.ws.ping);

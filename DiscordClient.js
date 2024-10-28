@@ -151,5 +151,5 @@ client.on('messageCreate', async (message) => {
     }
     if (!message.content.startsWith(PREFIX)) return;
     console.log(`[COMMAND] ${message.content} from ${message.author.username} on #${message.channel.name}.`)
-    await handleCommand(message, accountsdata);
+    await handleCommand(message, accountsdata, client);
 });

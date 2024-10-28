@@ -1,7 +1,7 @@
 const fetch = require('node-fetch');
 const config = require('../config.json');
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
-module.exports = async (message, args, accountsdata) => {
+module.exports = async (message, args, accountsdata, client) => {
     const accData = accountsdata[message.author.id];
     const repo = args[1];
     var username;
