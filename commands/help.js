@@ -28,6 +28,11 @@ const admin_commands = [
         name: "broadcast",
         args: ["channel"],
         desc: "Broadcast to a channel by replying to the message."
+    },
+    {
+        name: "ping",
+        args: [],
+        desc: "Ping UXBot."
     }
 ]
 function createHelpFields(commands) {
