@@ -78,7 +78,6 @@ const roleMapping = {
     '🎨': '🎨designer',
     '💻': '💻developer'
 };
-var allowJoinProjs = false
 client.on('messageReactionAdd', async (reaction, user) => {
     if (reaction.partial) {
         try {
@@ -94,7 +93,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
         const reactionEmoji = reaction.emoji.name;
         const member = await message.guild.members.fetch(user.id);
         if (reactionEmoji == '🔥') {
-            if (!allowJoinProjs) return removeReaction(user, message, reactionEmoji);
+            if (!config.allow_project_join) return removeReaction(user, message, reactionEmoji);
             if (member.roles.cache.has("1294311955401674762") || member.roles.cache.has("1284754382205882388") || member.roles.cache.has("1284754282075390044") || member.roles.cache.has("1292074089715990549")) {
                 const member = message.guild.members.cache.get(user.id);
                 const dscrd_nick = member?.nickname || undefined;

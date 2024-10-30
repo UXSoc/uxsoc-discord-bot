@@ -1,4 +1,5 @@
 const fetch = require('node-fetch');
+const config = require('../config.json');
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 module.exports = async (message, args, accountsdata, client) => {
     const accData = accountsdata[message.author.id];
@@ -25,7 +26,7 @@ module.exports = async (message, args, accountsdata, client) => {
         if  (username !== accData.github) return message.reply(`Pull request author mismatch. Owned by __${username}__ instead of __${accData.github}__.`);
         await message.member.roles.add("1294311955401674762");
         const name = (message.member.nickname)?message.member.nickname.split(" ")[0]:username
-        message.reply(`Congratulations **${name}**! You're now git good 🎉! You can now contribute to community projects!`)
+        message.reply(`Congratulations **${name}**! You're now git good 🎉!${config.allow_project_join?" You can now contribute to community projects!":''}`)
     } catch (error) {
         return message.reply(`An error occurred. ${error}`)
     }
