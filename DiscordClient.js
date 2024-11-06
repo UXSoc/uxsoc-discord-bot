@@ -89,7 +89,7 @@ client.on('messageReactionAdd', async (reaction, user) => {
     }
     if (user.bot) return;
     const message = reaction.message;
-    if (message.channel.parentId == config.channels.projects) {
+    if (message.channel.parentId == config.channels.projects && (message.author.bot && message.author.id == config.bot_userId)) {
         const reactionEmoji = reaction.emoji.name;
         const member = await message.guild.members.fetch(user.id);
         if (reactionEmoji == '🔥') {
